@@ -6,8 +6,8 @@ const Cart = ()=>{
 
     const {
         cart,
-        aumentarCantidad,
-        disminuirCantidad,
+        incrementHandle,
+        decrementHandle,
         total,
       } = useContext(CartContext);
 
@@ -52,7 +52,7 @@ const Cart = ()=>{
                   <div className="contadorPizza">
                     <button
                       onClick={() => {
-                        disminuirCantidad(producto);
+                        decrementHandle(producto.id);
                       }}
                       className="disminuir"
                     >
@@ -61,7 +61,7 @@ const Cart = ()=>{
                     <p>{producto.cant}</p>
                     <button
                       onClick={() => {
-                        aumentarCantidad(producto);
+                        incrementHandle(producto.id);
                       }}
                       className="incrementar"
                     >

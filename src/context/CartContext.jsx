@@ -24,43 +24,34 @@ const CartProvider = ({ children }) => {
         }
     };
 
-
-
-    const eliminarDelCarrito = (id) => {
-        setCart(cart.filter(item => item.id !== id));
-      };
-    
-      const aumentarCantidad = (producto) => {
-        setCart(
-          cart.map(item =>
-            item.id === producto.id
-              ? { ...item, cant: item.cant + 1 }
-              : item
-          )
-        );
-      };
-    
-      const disminuirCantidad = (producto) => {
-        if (producto.cant === 1) {
-          eliminarDelCarrito(producto.id);
-        } else {
+       const incrementHandle = (i) => {
           setCart(
-            cart.map(item =>
-              item.id === producto.id
-                ? { ...item, cant: item.cant - 1 }
-                : item
+            cart.map((pizza) =>
+              pizza.id === i ? { ...pizza, cant: pizza.cant + 1 } : pizza
             )
           );
-        }
-      };
+        };
       
-      useEffect(() => {
-        const newTotal = cart.reduce(
-          (acc, item) => acc + item.cant * item.price,
-          0
-        );
-        console.log(newTotal);
-        setTotal(newTotal);
+        const decrementHandle = (i) => {
+          setCart(
+            cart.map((pizza) =>
+                pizza.id === i && pizza.cant > 0
+                  ? { ...pizza, cant: pizza.cant - 1 }
+                  : pizza
+              )
+              .filter((pizza) => pizza.cant > 0)
+          );
+        };
+        const getTotal = () => {
+          const totalPizza = cart.reduce(
+            (acc, pizza) => acc + pizza.price * pizza.cant,
+            0
+          );
+          setTotal(totalPizza);
+        };
+      
+        useEffect(() => {
+          getTotal();
         }, [cart]);
 
         return (
@@ -68,8 +59,8 @@ const CartProvider = ({ children }) => {
                 value={{ 
                 cart,
                 agregarAlCarrito,
-                aumentarCantidad,
-                disminuirCantidad,
+                incrementHandle,
+                decrementHandle,
                 total
                 }}>
             {children}
